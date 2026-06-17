@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WeSide</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+</head>
+<body>
+
+    <div class="app-layout">
+        
+        <header class="custom-header">
+            We<span>Side</span>
+        </header>
+
+        <main class="main-content">
+            {% block content %}
+            
+            {% endblock %}
+        </main>
+
+        <nav class="bottom-tab-bar">
+            <a href="/home" class="tab-item active">
+                <span class="tab-icon">🏠</span>
+                <span>Home</span>
+            </a>
+            <a href="/room" class="tab-item">
+                <span class="tab-icon">🎮</span>
+                <span>My Room</span>
+            </a>
+            <a href="/ranking" class="tab-item">
+                <span class="tab-icon">🏆</span>
+                <span>Ranking</span>
+            </a>
+            <a href="/user/mypage" class="tab-item">
+                <span class="tab-icon">👤</span>
+                <span>My Page</span>
+            </a>
+        </nav>
+
+    </div>
+
+</body>
+</html>

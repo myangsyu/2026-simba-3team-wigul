@@ -1,0 +1,95 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    background-color: #f1f5f9; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* 모바일  앱 프레임틀 */
+.app-layout {
+    width: 100%;
+    max-width: 450px; 
+    height: 100vh;
+    background-color: #ffffff; 
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+/* 상단 헤더 WeSide 로고 */
+.custom-header {
+    background-color: #1e293b;
+    color: #ffffff;
+    padding: 16px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 800;
+}
+.custom-header span {
+    color: #38bdf8;
+}
+
+/* 메인 콘텐츠 영역 (스크롤 가능) */
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    padding-bottom: 80px;
+}
+
+/*  하단 내비게이션 탭 바 */
+.bottom-tab-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 65px;
+    background-color: #ffffff;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 10;
+}
+
+.tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 500;
+    gap: 4px;
+}
+
+.tab-item.active {
+    color: #1e293b;
+    font-weight: 700;
+}
+
+.tab-icon {
+    font-size: 20px;
+}
+
+ /* ------------ 미디어쿼리 ------------ */
+@media (min-width: 577px) {
+    body {
+        background-color: #e2e8f0; /* PC용 바깥 배경 톤 다운 */
+    }
+    .app-layout {
+        height: 92vh;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+}

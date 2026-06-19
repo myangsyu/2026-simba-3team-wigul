@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'KblJump';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-5@1.0/KBLJump_RTTF.woff2') format('woff2');
+    font-weight: normal;
+    font-display: swap;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -13,7 +20,6 @@ body {
     min-height: 100vh;
 }
 
-/* 모바일  앱 프레임틀 */
 .app-layout {
     width: 100%;
     max-width: 450px; 
@@ -26,20 +32,43 @@ body {
     overflow: hidden;
 }
 
-/* 상단 헤더 WeSide 로고 */
-.custom-header {
-    background-color: #1e293b;
-    color: #ffffff;
-    padding: 16px;
-    text-align: center;
-    font-size: 18px;
-    font-weight: 800;
-}
-.custom-header span {
-    color: #38bdf8;
+/*  1. 상단 헤더 */
+.main-header {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #f0f0f0;
+    gap: 8px;
+    z-index: 10;
+    justify-content: center;
 }
 
-/* 메인 콘텐츠 영역 (스크롤 가능) */
+.header-char {
+    width: 45px;
+    height: auto;
+}
+
+.header-logo {
+    font-family: 'KblJump', sans-serif;
+    font-size: 45px;
+    color: var(--Foundation-Green-Normal, #a8d832);
+    text-shadow: 0 1.73px 1.73px #8DB529;
+    margin: 0;
+    line-height: 1;
+    position: relative;
+    top: -5px; 
+    line-height: normal;
+    letter-spacing: 0.338px;
+    justify-content: center;
+    display: flex;
+    width: 241px;
+    height: 38px;
+    text-align: center;
+    transform: scaleY(0.8);
+
+}
+/* 메인 콘텐츠 영역  */
 .main-content {
     flex: 1;
     overflow-y: auto;
@@ -47,19 +76,24 @@ body {
     padding-bottom: 80px;
 }
 
-/*  하단 내비게이션 탭 바 */
+.main-content::-webkit-scrollbar {
+    display: none;
+}
+
+/*  2. 하단 내비게이션 탭 바 */
 .bottom-tab-bar {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 65px;
-    background-color: #ffffff;
-    border-top: 1px solid #e2e8f0;
+    height: 70px;
+    background-color: #3b3b3b;
+    border-radius: 24px 24px 0 0;
     display: flex;
     justify-content: space-around;
     align-items: center;
     z-index: 10;
+    padding-bottom: 5px;
 }
 
 .tab-item {
@@ -68,24 +102,24 @@ body {
     align-items: center;
     text-decoration: none;
     color: #94a3b8;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 500;
-    gap: 4px;
+    gap: 6px;
+    transition: color 0.2s;
 }
 
-.tab-item.active {
-    color: #1e293b;
+.tab-item svg {
+    stroke: currentColor;
+}
+
+.tab-item.active, .tab-item:hover {
+    color: #ffffff;
     font-weight: 700;
 }
 
-.tab-icon {
-    font-size: 20px;
-}
-
- /* ------------ 미디어쿼리 ------------ */
+/* ------------ 미디어쿼리 ------------ */
 @media (min-width: 577px) {
-    body {
-        background-color: #e2e8f0; /* PC용 바깥 배경 톤 다운 */
+    body {background-color: #e2e8f0;
     }
     .app-layout {
         height: 92vh;

@@ -1,3 +1,18 @@
+@font-face {
+    font-family: 'KblJump';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-5@1.0/KBLJump_RTTF.woff2') format('woff2');
+    font-weight: normal;
+    font-display: swap;
+}
+
+/* KBL 점프체 (굵은 굵기 - Bold) */
+@font-face {
+    font-family: 'KblJump';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2601-5@1.0/KBLJump_BTTF.woff2') format('woff2');
+    font-weight: 700;
+    font-display: swap;
+}
+
 .splash-wrapper {
     position: relative;
     width: 100%;
@@ -28,7 +43,7 @@
 
 /* 위굴이 애니메이션 */
 .wiggle-char-anim {
-    width: 120px;
+    width: 70px;
     height: auto;
     animation: bounce 0.6s infinite alternate ease-in-out;
 }
@@ -39,16 +54,70 @@
 }
 
 /* 글씨 스타일 */
-.splash-loading-text { font-size: 16px; color: #ffffff; text-shadow: 0 1.73px 1.73px #8DB529; font-weight: 600; margin-top: 20px; margin-bottom: 8px; }
-.splash-logo, .auth-logo { font-size: 60px; font-weight: 900;text-shadow: 0 1.73px 1.73px #8DB529; color: #ffffff; margin: 0; letter-spacing: -1px; }
-.splash-sub, .auth-sub { font-size: 14px; color: #ffffff; text-shadow: 0 1.73px 1.73px #8DB529; opacity: 0.8; margin-top: 4px; }
+.splash-loading-text { 
+    color: #FFF;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 12px; /* 120% */
+    letter-spacing: 0.1px; }
+
+.splash-logo, .auth-logo { 
+    color: #FFF;
+text-align: center;
+text-shadow: 0 1.73px 1.73px #8DB529;
+font-family: 'kbljump', sans-serif;
+font-size: 60px;
+font-style: normal;
+/* font-weight: 500; */
+line-height: normal;
+letter-spacing: 0.338px;
+line-height: 1;
+margin-bottom: 0px !important;
+letter-spacing: 0.338px;
+
+position: relative;
+top: -14.5px;
+}
+
+.splash-sub, .auth-sub { 
+    color: #FFF;
+text-align: center;
+
+/* 위사이드/작은 텍스트 그림자 */
+text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.10);
+font-family: Pretendard;
+font-size: 14px;
+font-style: normal;
+font-weight: 600;
+line-height: 18px; /* 128.571% */
+letter-spacing: 0.14px;
+
+margin-top: 3px !important;
+}
 
 /* 2번 로그인/회원가입 버튼 구역 */
 .auth-content {
     width: 100%;
 }
-.logo-area { margin-bottom: 40px; text-align: center; }
-.auth-char-small { width: 70px; height: auto; margin-bottom: 12px; }
+.logo-area { margin-bottom: 40px; 
+    text-align: center; }
+
+.logo-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    white-space: nowrap;
+}
+.auth-logo { 
+    font-size: 40px !important; /* 기존 60px에서 40px 정도로 줄임 */
+}
+
+.auth-char-small { width: 60px; height: auto; margin-bottom: 0px; flex-shrink: 0;}
 
 /* 흰색 카드 버튼 */
 .btn-group {

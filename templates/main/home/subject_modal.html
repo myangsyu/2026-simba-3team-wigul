@@ -1,0 +1,21 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/subject_modal.css' %}">
+<script src="https://kit.fontawesome.com/f7691a6795.js" crossorigin="anonymous"></script>
+
+
+<div class="modal">
+    <div class="content">
+        <div class="title">대주제 고르기</div>
+        <div class="subject">
+            <button>사랑과 연애</button>
+            <button>취향과 라이프 스타일</button>
+            <button>최악의 상황은?</button>
+            <button>갓생과 일</button>
+        </div>
+        <a href="/subject-select" class="skip">건너뛰기<i class="fa-solid fa-angle-right"></i></a>
+        <button class="start">시작하기</button>
+    </div>
+</div>
+
+<script src="{% static 'js/select_modal.js' %}"></script>

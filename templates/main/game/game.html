@@ -8,7 +8,7 @@
 
 <div class="body">
     <div class="room-info">
-        <div class="room-name">에스파도 스파다</div>
+        <div class="room-name">{{ room.title }}</div>
         <div class="room-temp">
             <div class="room-temp-title">
                 우리 방 온도
@@ -97,8 +97,8 @@
                 </div>
             </div>
             <div class="room-temp-content">
-                <span class="room-temp-subtitle">더 많은 대화가 필요해요!</span>
-                <span class="room-temp-detail">10°C</span>
+                <span class="room-temp-subtitle">{{ temp_message }}</span>
+                <span class="room-temp-detail">{{ current_temp|floatformat:1 }}°C</span>
             </div>
         </div>
     </div>
@@ -106,20 +106,22 @@
     <hr class="line">
 
     <div class="game">
-        <div class="round">1라운드</div>
+        <div class="round">{{ current_round.round_number }}라운드</div>
         <div class="game-body">
             <div class="game-subject">주제</div>
-            <div class="game-subject-detail">연인과의 만남 횟수로 고민하는 당신,<br>더 선호하는 것은?</div>
+            <div class="game-subject-detail">
+                {{ current_round.question_text|linebreaksbr }}
+            </div>
             <div class="game-balance">
                 <div class="game-balance">
                     <button class="game-balance-a">
                         <span class="game-balance-side">A</span>
-                        <span class="game-balance-detail">일주일에 5번 만나자는 연인</span>
+                        <span class="game-balance-detail">{{ current_round.option_a }}</span>
                     </button>
 
                     <button class="game-balance-b">
                         <span class="game-balance-side">B</span>
-                        <span class="game-balance-detail">한 달에 한 번 만날 수 있는 연인</span>
+                        <span class="game-balance-detail">{{ current_round.option_b }}</span>
                     </button>
                 </div>
             </div>
@@ -193,7 +195,6 @@
             <div class="my-side-dsc">당신은 A SIDE!</div>
             <div class="my-side-toggle-wrapper">
 
-                <!-- 캐릭터 -->
                 <img
                     src="{% static 'images/logo_wigul.png' %}"
                     alt=""
@@ -219,10 +220,7 @@
         </div>
     </div>
 </div>
-
 <script src="{% static 'js/game_toggle.js' %}"></script>
 <script src="{% static 'js/game_temp_info.js' %}"></script>
 <script src="{% static 'js/game_view_more.js' %}"></script>
-
-
-{% endblock %}
+{% endblock content %}

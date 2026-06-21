@@ -1,6 +1,8 @@
 import random
 import uuid
 
+from django.utils import timezone
+from datetime import timedelta
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -92,21 +94,22 @@ class Zone(models.TextChoices):
 
 # Room.current_topic(정수 1~4)에 맞춘 주제 라벨
 TOPIC_CHOICES = [
-    (1, "연애"),
-    (2, "우정"),
-    (3, "일상·일"),
-    (4, "밸런스 게임"),
+    (1, "사랑과 연애"),
+    (2, "취향과 라이프스타일"),
+    (3, "최악의 상황은"),
+    (4, "갓생과 일"),
 ]
 
 
 class TempEngine:
     """프레임워크 무관 순수 계산. (Room.temperature 는 FloatField → float 사용)"""
 
-    START = 10.0          # 게임 시작 온도
-    COMPLETION = 1.0      # 라운드 완료 보너스
-    PER_CHANGE = 0.3      # 변경 1건당
-    PER_EXTENSION = 0.5   # 연장 1회당
-    EXTENSION_CAP = 1.0   # 연장 누적 상한 (어뷰징 방지)
+    START = 10.0
+    # 테스트용: 라운드 하나 끝날 때마다 온도가 25도씩 확 오르게 설정
+    COMPLETION = 25.0 
+    PER_CHANGE = 5.0
+    PER_EXTENSION = 2.0
+    EXTENSION_CAP = 10.0
     MAX = 100.0
 
     GREEN_MAX = 34        # [10, 34)  초록
@@ -207,6 +210,8 @@ class GameRound(models.Model):
     duration = models.PositiveIntegerField(default=0)      # 초 단위
     started_at = models.DateTimeField(auto_now_add=True)
     ended_at = models.DateTimeField(null=True, blank=True)
+    # ✅ 핵심 추가: 이 라운드의 타이머가 0이 되는 절대 시각 (기준점)
+    expires_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ["room", "round_number"]
@@ -214,6 +219,32 @@ class GameRound(models.Model):
 
     def __str__(self):
         return f"{self.room.title} R{self.round_number}"
+    
+    # ==========================================
+    # ✅ 추가: 타이머 제어 및 계산 헬퍼 메서드
+    # ==========================================
+    def start_timer(self, minutes=5):
+        """라운드 시작 시 5분 타이머 세팅"""
+        self.expires_at = timezone.now() + timedelta(minutes=minutes)
+        self.save(update_fields=['expires_at'])
+
+    def extend_timer(self, minutes=5):
+        """5분 연장 버튼 클릭 시: 마감 시각을 뒤로 미루고 연장 횟수 증가"""
+        if self.expires_at:
+            self.expires_at += timedelta(minutes=minutes)
+            self.extensions += 1
+            self.save(update_fields=['expires_at', 'extensions'])
+
+    def get_remaining_seconds(self):
+        """현재 시각 기준으로 남은 시간(초) 계산"""
+        if not self.expires_at:
+            return 0
+        
+        now = timezone.now()
+        if now >= self.expires_at:
+            return 0
+            
+        return int((self.expires_at - now).total_seconds())
 
     # ----- 현재 라이브 사이드: 멤버별 가장 최근 단계의 표 (2:2 점수 표시용) -----
     def live_sides(self):

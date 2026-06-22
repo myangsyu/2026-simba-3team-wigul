@@ -8,7 +8,6 @@
 
 
 .home-container {
-    background-color: #F4F9F1;
     min-height: 100%; 
     padding: 30px 20px;
     font-family: 'Pretendard', sans-serif;
@@ -18,9 +17,9 @@
 /* 웰컴 박스 및 텍스트 */
 .welcome-box {
     background-color: #ffffff; 
-    padding: 24px 20px;
+    padding: 0px 20px;
     border-radius: 24px; 
-    border: 1px solid #E0E0E0;
+    border: 1px solid #A8D832;
     margin-bottom: 24px; 
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02); 
 }
@@ -51,13 +50,15 @@
 }
 .bubble {
     position: relative;
-    background-color: #ffffff;
+    background-color: #F6FBEB;
     padding: 12px 16px;
     border-radius: 20px;
     font-size: 14px;
     font-weight: 700;
     color: #333;
     border: 1px solid #D9D9D9;
+    box-shadow: 2px 2px 1px 0 rgba(59, 76, 18, 0.20);
+    margin-bottom: 20px;
 }
 .bubble::before {
     content: '';
@@ -122,8 +123,15 @@
 }
 
 
-.btn-box.green { background-color:  #A8D832; color: #333; }
-.btn-box.yellow { background-color: var(--Foundation-Yellow-Normal, #FFD94A );
+.btn-box.green { 
+    background-color:  #A8D832; 
+    color: #333; 
+    box-shadow: 2px 2px 1px 0 rgba(59, 76, 18, 0.20);
+}
+
+.btn-box.yellow { 
+    background-color: var(--Foundation-Yellow-Normal, #FFD94A );
+    box-shadow: 2px 2px 1px 0 rgba(59, 76, 18, 0.20);
     color: #333; }
 
 
@@ -138,13 +146,15 @@
     margin: 0;
     font-size: 18px;
     font-weight: 800;
+    margin-left: 5px;
 }
 .list-header h3 span { color: #21D06C; }
 .view-all {
-    color: #999;
+    color: #444;
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
+    margin-right: 5px;
 }
 
 .room-item {
@@ -178,7 +188,20 @@
     color: #999;
     font-size: 14px;
     font-weight: 600;
+    
 }
 .room-empty p {
     margin: 0;
+    margin-top: 25px;
+    margin-left: 5px;
+    font-weight: 500;
+}
+
+.room-list {
+    background-color: #f6faef;
+    border-radius: 16px;
+    padding: 16px;
+    flex-grow: 1;
+    margin-bottom: 20px;
+    box-shadow: 2px 2px 1px 0 rgba(59, 76, 18, 0.20);
 }

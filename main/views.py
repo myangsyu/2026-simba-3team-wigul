@@ -157,3 +157,6 @@ def game_view(request, room_id):
     }
     
     return render(request, 'main/game/game.html', context)
+
+def ranking_view(request):
+    return render(request, 'main/ranking/ranking.html')

@@ -102,12 +102,12 @@ TOPIC_CHOICES = [
 
 
 class TempEngine:
-    """온도 증감폭 및 구역별 질문 가중치를 관장하는 프레임워크 무관 순수 계산 엔진"""
+
 
     START = 10.0
-    COMPLETION = 25.0
-    PER_CHANGE = 5.0
-    PER_EXTENSION = 2.0
+    COMPLETION = 1.0
+    PER_CHANGE = 0.3
+    PER_EXTENSION = 0.5
     EXTENSION_CAP = 10.0
     MAX = 100.0
 

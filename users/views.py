@@ -35,11 +35,9 @@ def mypage_view(request):
         if hasattr(room, 'total_rounds'):
             total_rounds += room.total_rounds
 
-    # 💡 [필드명 매칭 완료] 네가 통일한 profile_character 이름으로 안전하게 꺼내옵니다.
     db_color = getattr(profile, 'background_color', 'bg-red')
-    db_avatar_file = getattr(profile, 'profile_character', 'wigul_1.png') # 🌟 여기!
+    db_avatar_file = getattr(profile, 'profile_character', 'wigul_1.png')
 
-    # 메인 화면에 띄워줄 이미지 태그 조립
     avatar_html = mark_safe(f'<img src="/static/images/{db_avatar_file}" alt="위굴이" style="width:100%; height:100%; object-fit:contain;">')
 
     context = {

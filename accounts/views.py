@@ -17,7 +17,7 @@ def signup_view(request):
         profile_character = request.POST.get('profile_character', 'basic')
         background_color = request.POST.get('profile_color', 'bg-red')
 
-        # 입력 데이터 유지
+        # 입력 데이터 유지용 context
         context = {
             'username': username,
             'nickname': nickname,
@@ -25,20 +25,23 @@ def signup_view(request):
             'background_color': background_color
         }
 
-        # 아이디 중복 검사
+        # 1. 아이디 중복 검사
         if User.objects.filter(username=username).exists():
             messages.error(request, "이미 존재하는 아이디입니다.")
             return render(request, 'accounts/signup.html', context)
         
-        # 비밀번호 길이 검사 (2자 이상 15자 이하)
-        if not (2 <= len(password) <= 15):
-            messages.error(request, "비밀번호는 2자 이상 15자 이하로 설정해야 합니다.")
+        # 2. 닉네임 검사: 길이 (2자 이상 15자 이하)
+        if not (2 <= len(nickname) <= 15):
+            messages.error(request, "닉네임은 2자 이상 15자 이하로 설정해야 합니다.")
             return render(request, 'accounts/signup.html', context)
         
-        # 비밀번호 특수문자 금지 검사: 알파벳 대소문자, 숫자, 한글로만 이루어져 있는지 체크
-        if not re.match(r'^[a-zA-Z0-9가-힣]+$', password):
-            messages.error(request, "비밀번호에 특수문자는 사용할 수 없습니다.")
+        # 3. 닉네임 검사: 특수문자 금지 (영문, 숫자, 한글만 허용)
+        if not re.match(r'^[a-zA-Z0-9가-힣]+$', nickname):
+            messages.error(request, "닉네임에 특수문자는 사용할 수 없습니다.")
             return render(request, 'accounts/signup.html', context)
+        
+        # (참고) 비밀번호 조건은 프로젝트 보안 정책에 맞게 자유롭게 유지하거나 수정하면 돼!
+        
         user = User.objects.create_user(username=username, password=password)
 
         UserProfile.objects.create(

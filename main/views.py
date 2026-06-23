@@ -49,6 +49,17 @@ def create_room_view(request):
 
     return render(request, 'main/home/create_room.html')
 
+def room_detail_view(request, room_id):
+    room = get_object_or_404(Room, id=room_id)
+    members = RoomMember.objects.filter(room=room).select_related('user__userprofile')
+    
+    context = {
+        'room': room,
+        'room_members': members,
+        'room_join_url': f'/game/{room.id}/',
+        'temperature': room.temperature,
+    }
+    return render(request, 'main/room/detail.html', context)
 
 @login_required
 def subject_select_modal_view(request, room_id):
@@ -324,3 +335,20 @@ def myroom_view(request):
     return render(request, 'main/myroom/myroom_list.html')
 def myroom_detail_view(request):
     return render(request, 'main/myroom/myroom_detail.html')
+
+def myroom_list_view(request):
+    # 유저가 참여 중인 방 목록
+    rooms = Room.objects.filter(members__user=request.user).distinct().order_by('-created_at')
+    
+    for room in rooms:
+        room_members_data = []
+        for member in room.members.select_related('user__userprofile'):
+            profile = member.user.userprofile
+            room_members_data.append({
+                'nickname': profile.nickname,
+                'color': getattr(profile, 'background_color', 'bg-red'),
+                'avatar': getattr(profile, 'profile_character', 'wigul_1.png'),
+            })
+        room.member_profiles = room_members_data # 템플릿에서 이 변수를 사용
+    
+    return render(request, 'main/myroom/myroom_list.html', {'rooms': rooms})

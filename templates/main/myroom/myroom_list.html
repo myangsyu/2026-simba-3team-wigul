@@ -16,12 +16,10 @@
             <div class="myroom-item">
                 <div class="myroom-title">{{ room.name }}</div>
                 <div class="mymember-stack">
-                    {% for member in room.members.all %}
-                        {% if member.profile.image %}
-                            <img src="{{ member.profile.image.url }}" alt="{{ member.username }}">
-                        {% else %}
-                            <img src="{% static 'images/default_char.png' %}" alt="{{ member.username }}">
-                        {% endif %}
+                    {% for member in room.member_profiles %}
+                        <img src="{% static 'images/' %}{{ member.avatar }}" 
+                            alt="{{ member.nickname }}"
+                            class="member-avatar {{ member.color }}">
                     {% endfor %}
                 </div>
             </div>

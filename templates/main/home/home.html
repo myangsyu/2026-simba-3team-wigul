@@ -8,7 +8,7 @@
     <div class="home-container">
         <section class="welcome-box">
             <div class="welcome-text">
-                <strong>{{ user.username|default:"게스트" }}</strong> <span class="nim-text">님!</span>
+                <strong>{{ user.userprofile.nickname }}</strong> <span class="nim-text">님!</span>
             </div>
             <div class="character-bubble">
                 <img src="{% static 'images/waiting_wigul.png' %}" alt="회색위굴" class="char-thumb">

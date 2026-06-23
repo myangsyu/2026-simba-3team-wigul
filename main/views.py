@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from .models import Room, RoomMember, GameRound, Question, TempEngine
 
+
 def intro_view(request):
     if request.user.is_authenticated:
         return redirect('home')

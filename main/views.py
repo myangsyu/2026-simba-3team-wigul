@@ -47,8 +47,8 @@ def create_room_view(request):
             room=new_room,
             is_host=True
         )
-
-        # 방 만들고 바로 game이 아니라, 1라운드 미리보기(select 모달) 단계로 이동
+        
+        # 주소 매핑 규칙에 맞게 리다이렉트 경로 확인 (game 뷰로 바로 쏘거나 subject_select로 전송)
         return redirect('subject_select', room_id=new_room.id)
 
     return render(request, 'main/home/create_room.html')

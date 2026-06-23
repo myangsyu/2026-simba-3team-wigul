@@ -39,6 +39,6 @@ urlpatterns = [
 
     # 🏆 랭킹 및 나의 방 플로우
     path('ranking/', views.ranking_view, name='ranking'),
-    path('room/', views.myroom_view, name='myroom'),
-    path('room/detail/', views.myroom_detail_view, name='myroom-detail'),
+    path('room/', views.myroom_list_view, name='myroom'),
+    path('room/<uuid:room_id>/', views.myroom_detail_view, name='myroom_detail'),
 ]

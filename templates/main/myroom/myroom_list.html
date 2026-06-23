@@ -8,21 +8,24 @@
 
     <div class="myroom-list-title">
         <span class="myroom">MY ROOM</span>
-        <span class="myroom-num">(4)</span>
+        <span class="myroom-num">({{ rooms|length }})</span>
     </div>
 
     <div class="myroom-list">
         {% for room in rooms %}
-            <div class="myroom-item">
-                <div class="myroom-title">{{ room.name }}</div>
+            <a href="{% url 'myroom_detail' room.id %}" class="myroom-item">
+                <div class="myroom-title">{{ room.title }}</div>
                 <div class="mymember-stack">
                     {% for member in room.member_profiles %}
-                        <img src="{% static 'images/' %}{{ member.avatar }}" 
-                            alt="{{ member.nickname }}"
-                            class="member-avatar {{ member.color }}">
+                        <div class="mymember">
+                            <img src="{{ member.avatar }}"
+                                 alt="{{ member.nickname }}"
+                                 class="member-avatar {{ member.color }}">
+                            <span class="member-nick">{{ member.nickname }}</span>
+                        </div>
                     {% endfor %}
                 </div>
-            </div>
+            </a>
             {% empty %}
             <div class="myroom-empty">
                 <p>아직 속한 방이 없습니다.</p>

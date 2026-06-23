@@ -68,17 +68,48 @@ letter-spacing: 0.3px;
     font-weight: 800;
     color: #333;
 }
+.myroom-item {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
 .mymember-stack {
     display: flex;
+    gap: 8px;
 }
-.mymember-stack img {
+.mymember {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    max-width: 44px;
+}
+.member-avatar {
     width: 32px;
     height: 32px;
     border-radius: 50%;
     border: 2px solid #fff;
-    margin-left: -10px;
+    object-fit: contain;
 }
-.mymember-stack img:first-child { margin-left: 0; }
+.member-nick {
+    font-size: 9px;
+    color: #777;
+    font-weight: 600;
+    max-width: 44px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 회원가입 때 고른 배경 색상 */
+.bg-red    { background-color: #EF152E; }
+.bg-orange { background-color: #FF8C00; }
+.bg-yellow { background-color: #FFE500; }
+.bg-green  { background-color: #74FD34; }
+.bg-blue   { background-color: #1E69FF; }
+.bg-purple { background-color: #F433F7; }
+.bg-gray   { background-color: #717171; }
 
 .myroom-empty {
     justify-content: center;

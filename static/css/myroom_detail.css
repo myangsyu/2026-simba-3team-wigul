@@ -205,6 +205,24 @@ letter-spacing: 0.42px;
 .avatar.orange { background-color: #ffcc80; }
 .avatar.blue { background-color: #b3e5fc; }
 
+/* 회원가입 때 고른 배경 색상 */
+.bg-red    { background-color: #EF152E; }
+.bg-orange { background-color: #FF8C00; }
+.bg-yellow { background-color: #FFE500; }
+.bg-green  { background-color: #74FD34; }
+.bg-blue   { background-color: #1E69FF; }
+.bg-purple { background-color: #F433F7; }
+.bg-gray   { background-color: #717171; }
+
+.badge-me {
+    font-size: 11px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #FFD94A;
+    padding: 3px 9px;
+    border-radius: 6px;
+}
+
 .nickname {
     font-size: 14px;
     font-weight: bold;

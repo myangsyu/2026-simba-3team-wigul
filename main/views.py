@@ -1,6 +1,7 @@
 import random
 import uuid
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
@@ -22,6 +23,12 @@ def intro_view(request):
 def home_view(request):
     """사용자가 참여 중인 토론방 목록을 생성일 역순으로 나열합니다."""
     rooms = Room.objects.filter(members__user=request.user).distinct().order_by('-created_at')
+
+    for room in rooms:
+        room.member_profiles = [
+            _member_profile_data(m)
+            for m in room.members.select_related('user__userprofile')
+        ]
 
     context = {
         'rooms': rooms,
@@ -121,6 +128,7 @@ def waiting_room_members_api(request, room_id):
             'color': color,
             'avatar': static(f'images/{char_key}.png'),
             'is_host': member.is_host,
+            'is_me': member.user_id == request.user.id,
         })
 
     return JsonResponse({
@@ -128,6 +136,7 @@ def waiting_room_members_api(request, room_id):
         'member_count': len(members_data),
         'status': room.status,
         'started': room.status == Room.STATUS_STARTED,
+        'temperature': room.temperature,
     })
 
 
@@ -625,29 +634,62 @@ def ranking_view(request):
     
     return render(request, 'main/ranking/ranking.html', context)
 
+def _member_profile_data(member):
+    """RoomMember → 회원가입 때 저장한 프로필(닉네임/아바타/배경색)을 dict 로 변환."""
+    profile = getattr(member.user, 'userprofile', None)
+    nickname = profile.nickname if profile and profile.nickname else member.user.username
+    char_key = (profile.profile_character if profile and profile.profile_character else 'wigul_1')
+    color = (profile.background_color if profile and profile.background_color else 'bg-red')
+    return {
+        'id': member.id,
+        'nickname': nickname,
+        'color': color,
+        'avatar': static(f'images/{char_key}.png'),
+        'is_host': member.is_host,
+    }
+
+
 @login_required
 def myroom_list_view(request):
+    """내가 속한 방 목록. 각 방의 멤버 프로필(닉네임+아바타)을 함께 노출한다. (polling 없음)"""
     rooms = Room.objects.filter(members__user=request.user).distinct().order_by('-created_at')
 
     for room in rooms:
-        room_members_data = []
-        for member in room.members.select_related('user__userprofile'):
-            profile = member.user.userprofile
-            room_members_data.append({
-                'nickname': profile.nickname,
-                'color': getattr(profile, 'background_color', 'bg-red'),
-                'avatar': getattr(profile, 'profile_character', 'wigul_1.png'),
-            })
-        room.member_profiles = room_members_data
+        room.member_profiles = [
+            _member_profile_data(m)
+            for m in room.members.select_related('user__userprofile')
+        ]
 
     return render(request, 'main/myroom/myroom_list.html', {'rooms': rooms})
 
 
 @login_required
-def myroom_view(request):
-    return render(request, 'main/myroom/myroom_list.html')
+def myroom_detail_view(request, room_id):
+    """방 상세 화면. 멤버/온도를 polling 으로 실시간 갱신한다."""
+    room = get_object_or_404(Room, id=room_id)
 
+    room_members = room.members.select_related('user__userprofile')
+    my_member = room_members.filter(user=request.user).first()
 
-@login_required
-def myroom_detail_view(request):
-    return render(request, 'main/myroom/myroom_detail.html')
+    member_profiles = []
+    for m in room_members:
+        data = _member_profile_data(m)
+        data['is_me'] = (m.user_id == request.user.id)
+        member_profiles.append(data)
+
+    context = {
+        'room': room,
+        'room_id': room.id,
+        'room_name': room.title,
+        'temperature': room.temperature,
+        'room_members': room_members,
+        'member_profiles': member_profiles,
+        'my_member_id': my_member.id if my_member else None,
+        'is_host': bool(my_member and my_member.is_host),
+        'room_join_url': request.build_absolute_uri(
+            reverse('waiting_room', args=[room.id])
+        ),
+        'members_api': reverse('waiting_room_members', args=[room.id]),
+        'waiting_url': reverse('waiting_room', args=[room.id]),
+    }
+    return render(request, 'main/myroom/myroom_detail.html', context)

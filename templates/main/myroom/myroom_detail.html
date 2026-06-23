@@ -4,14 +4,15 @@
 <link rel="stylesheet" href="{% static 'css/myroom_detail.css' %}">
 
 <div class="room-modal-overlay">
-
     <div class="room-create-modal">
 
-<form id="roomCreateForm" method="POST" action="">
-    {% csrf_token %} 
-    
-    <div class="room-input">방이름</div>
-    
+<form id="roomCreateForm" method="POST" action="{{ waiting_url }}"
+      data-is-host="{{ is_host|yesno:'true,false' }}"
+      data-members-url="{{ members_api }}">
+    {% csrf_token %}
+
+    <div class="room-input">{{ room_name }}</div>
+
     <input type="hidden" name="topic" id="selectedTopicInput" value="">
 
     <div class="info-grid">
@@ -21,7 +22,7 @@
             </div>
             <button type="button" class="share-btn">공유하기</button>
         </div>
-        
+
         <div class="temp-section">
             <div class="temp-box" id="tempBox" data-temp="{{ temperature }}">
                 <span class="temp-info-icon">ⓘ</span>
@@ -32,33 +33,31 @@
         </div>
     </div>
 
-        <div class="members-section">
-        <div class="members-header">멤버 ({{ room_members|length|default:"1" }})</div>
-        <ul class="member-list">
-            {% for member in room_members %}
+    <div class="members-section">
+        <div class="members-header">멤버 (<span id="memberCount">{{ member_profiles|length }}</span>)</div>
+        <ul class="member-list" id="memberList">
+            {% for member in member_profiles %}
             <li class="member-item">
                 <div class="status-dot online"></div>
-                <div class="avatar"><img src="{{ member.user.userprofile.profile_image }}" style="width:100%; height:100%; object-fit:contain;"></div>
-                <div class="nickname">{{ member.user.userprofile.nickname }}</div>
-                {% if member.is_host %}
-                    <div class="badge-host">방장</div>
-                {% endif %}
-            </li>
-            {% empty %}
-            <li class="member-item">
-                <div class="status-dot online"></div>
-                <div class="avatar"><img src="{{ user.userprofile.profile_image }}" style="width:100%; height:100%; object-fit:contain;"></div>
-                <div class="nickname">{{ user.userprofile.nickname }}</div>
-                <div class="badge-host">방장</div>
+                <div class="avatar {{ member.color }}">
+                    <img src="{{ member.avatar }}" style="width:100%; height:100%; object-fit:contain;">
+                </div>
+                <div class="nickname">{{ member.nickname }}</div>
+                {% if member.is_host %}<div class="badge-host">방장</div>{% endif %}
+                {% if member.is_me %}<div class="badge-me">ME</div>{% endif %}
             </li>
             {% endfor %}
         </ul>
     </div>
 
-    <button type="button" class="start-btn" id="openSubjectModalBtn">재시작하기!</button>
+    {% if is_host %}
+        <button type="button" class="start-btn" id="openSubjectModalBtn">재시작하기!</button>
+    {% else %}
+        <button type="button" class="start-btn" id="memberWaitBtn" disabled>방장이 시작하기를 기다리는 중...</button>
+    {% endif %}
 
+    {% include 'main/home/subject_modal.html' %}
 </form>
-{% include 'main/home/subject_modal.html' %}
 
     </div>
 </div>
@@ -67,40 +66,62 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const shareBtn = document.querySelector('.share-btn');
+    const formEl = document.getElementById('roomCreateForm');
+    const MEMBERS_API = formEl.dataset.membersUrl;
 
+    // ===== 공유하기 =====
+    const shareBtn = document.querySelector('.share-btn');
     if (shareBtn) {
         shareBtn.addEventListener('click', async function() {
-
-            // 1. 공유할 URL 설정
-            const shareUrl = window.location.origin + "{{ room_join_url }}"; 
-            const shareTitle = "새로운 방에 초대합니다!";
-            const shareText = "링크를 눌러 방에 참여해보세요.";
-
-            // 2. Web Share API
+            const shareUrl = "{{ room_join_url }}";
             if (navigator.share) {
                 try {
-                    await navigator.share({
-                        title: shareTitle,
-                        text: shareText,
-                        url: shareUrl
-                    });
-                    console.log('공유 성공!');
-                } catch (error) {
-                    console.log('공유 취소 또는 실패:', error);
-                }
-            } 
-            // 3. Web Share API를 지원하지 않는 경우
-            else {
+                    await navigator.share({ title: "새로운 방에 초대합니다!", text: "링크를 눌러 방에 참여해보세요.", url: shareUrl });
+                } catch (error) { console.log('공유 취소 또는 실패:', error); }
+            } else {
                 try {
                     await navigator.clipboard.writeText(shareUrl);
-                    alert('초대 링크가 클립보드에 복사되었습니다!\n원하는 곳에 붙여넣기(Ctrl+V) 해주세요.');
-                } catch (err) {
-                    alert('아래 링크를 복사하여 공유해주세요.\n' + shareUrl);
-                }
+                    alert('초대 링크가 클립보드에 복사되었습니다!');
+                } catch (err) { alert('아래 링크를 복사하여 공유해주세요.\n' + shareUrl); }
             }
         });
     }
+
+    // ===== Polling: 멤버/온도 실시간 갱신 (이 화면에서만) =====
+    const memberListEl = document.getElementById('memberList');
+    const memberCountEl = document.getElementById('memberCount');
+    const tempValueEl = document.getElementById('tempValue');
+
+    function renderMembers(data) {
+        memberCountEl.textContent = data.member_count;
+        memberListEl.innerHTML = data.members.map(function(m) {
+            return '' +
+                '<li class="member-item">' +
+                    '<div class="status-dot online"></div>' +
+                    '<div class="avatar ' + m.color + '">' +
+                        '<img src="' + m.avatar + '" style="width:100%; height:100%; object-fit:contain;">' +
+                    '</div>' +
+                    '<div class="nickname">' + m.nickname + '</div>' +
+                    (m.is_host ? '<div class="badge-host">방장</div>' : '') +
+                    (m.is_me ? '<div class="badge-me">ME</div>' : '') +
+                '</li>';
+        }).join('');
+    }
+
+    function poll() {
+        fetch(MEMBERS_API)
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                renderMembers(data);
+                if (data.temperature !== undefined && tempValueEl) {
+                    tempValueEl.textContent = '🌡️ ' + data.temperature + '°C';
+                }
+            })
+            .catch(function(e) { console.error('polling 실패', e); });
+    }
+
+    poll();
+    setInterval(poll, 2000);
 });
 </script>
 

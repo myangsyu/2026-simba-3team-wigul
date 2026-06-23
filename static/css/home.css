@@ -179,6 +179,9 @@
     justify-content: space-between;
     align-items: center;
     border: 1px solid #E0E0E0;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
 }
 .room-title {
     font-size: 16px;
@@ -194,8 +197,18 @@
     border-radius: 50%;
     border: 2px solid #fff;
     margin-left: -10px;
+    object-fit: contain;
 }
 .member-stack img:first-child { margin-left: 0; }
+
+/* 회원가입 때 고른 배경 색상 */
+.bg-red    { background-color: #EF152E; }
+.bg-orange { background-color: #FF8C00; }
+.bg-yellow { background-color: #FFE500; }
+.bg-green  { background-color: #74FD34; }
+.bg-blue   { background-color: #1E69FF; }
+.bg-purple { background-color: #F433F7; }
+.bg-gray   { background-color: #717171; }
 
 .room-empty {
     justify-content: center;

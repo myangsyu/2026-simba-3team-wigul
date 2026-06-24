@@ -83,8 +83,8 @@
 }
 
 .subject button.selected{
-    background: var(--Foundation-Green-Normal, #A8D832);
-    color: var(--Foundation-Green-Light, #F6FBEB);
+    background:  #A8D832;
+    color: #F6FBEB
 }
 
 

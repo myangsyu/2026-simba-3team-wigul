@@ -251,6 +251,10 @@ line-height: normal;
 letter-spacing: 0.72px;
 }
 
+.toggle-container{
+    margin-bottom: 10px;
+}
+
 .my-side-toggle-wrapper{
     position: relative;
     width: 200px;
@@ -286,7 +290,7 @@ letter-spacing: 0.72px;
 .slider{
     width: 100px;
     height: 40px;
-    background: #c8d59a;
+    background: #A8D832;
     border-radius: 999px;
     display: flex;
     justify-content: center;

@@ -28,9 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
         btn.addEventListener('click', function() {
             // 다른 버튼들의 선택 표시(배경색) 초기화 (본인 CSS 스타일에 맞게 커스텀 가능)
             topicBtns.forEach(b => b.style.backgroundColor = ""); 
-            
-            // 클릭한 버튼 배경색 변경 (선택되었다는 표시)
-            this.style.backgroundColor = "#cce5ff"; 
+
             
             // 핵심: 선택한 번호(1~4)를 부모 HTML(create_room.html)에 있는 hidden input에 주입
             if (hiddenTopicInput) {

@@ -24,12 +24,14 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02); 
 }
 .welcome-text {
-    font-size: 22px;
+    font-size: 15px;
     color: #333;
     margin-bottom: 15px;
+    display: flex;
+    align-items: center;
 }
 .welcome-text strong {
-    font-size: 45px;
+    font-size: 30px;
     padding: 30 10;
 }
 .nim-text {
@@ -42,6 +44,7 @@
     display: flex;
     align-items: center;
     gap: 15px;
+    font-size: 15px;
     
 }
 .char-thumb {

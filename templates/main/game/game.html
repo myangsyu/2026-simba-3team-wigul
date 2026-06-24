@@ -77,8 +77,12 @@
             <div class="current-side-detail">
                 {% for member in room_members %}
                     <div class="{% if member == my_member %}game_profile_me{% else %}game_profile{% endif %}" data-member-id="{{ member.id }}">
-                        <img src="{% static 'images/logo_wigul.png' %}" alt="개굴" class="game_profile_img">
-                        <div class="game_profile_name">
+                            {% if member.user.userprofile %}
+                                <img src="{{ member.user.userprofile.avatar_url }}" class="game_profile_img">
+                            {% else %}
+                                <img src="{% static 'images/default.png' %}" class="game_profile_img">
+                            {% endif %}
+                                <div class="game_profile_name">
                             {{ member.user.username }}
                             {% if member.is_host %}<small style="color: #62c111; font-weight:bold;">(방장)</small>{% endif %}
                         </div>
